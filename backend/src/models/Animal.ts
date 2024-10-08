@@ -1,19 +1,19 @@
-import mongoose, { Schema, Model, SchemaDefinitionType } from 'mongoose';
+import {Schema, model} from 'mongoose';
 
-export interface IAnimal {
+interface IAnimal {
     name: string;
-    species: string;
     age: number;
     hungerLevel: number;
+    feed: () => void;
+    makeSound: () => string;
 }
 
-
-const AnimalSchema: Schema<SchemaDefinitionType<IAnimal>> = new Schema({
-    name: { type: String, required: true },
-    species: { type: String, required: true },
-    age: { type: Number, required: true },
-    hungerLevel: { type: Number, default: 50 }
+const animalSchema = new Schema<IAnimal>({
+    name: {type: String, required: true},
+    age: {type: Number, required: true},
+    hungerLevel: {type: Number, required: true, default: 100},
 });
 
+const Animal = model<IAnimal>('Animal', animalSchema);
 
-export const Animal = mongoose.model('Animal', AnimalSchema) as Model<IAnimal>;
+export default Animal;

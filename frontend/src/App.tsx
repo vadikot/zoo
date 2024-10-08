@@ -1,40 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
 
 const App = () => {
     const [message, setMessage] = useState('');
 
-    useEffect(() => {
-        axios.get('http://localhost:5050')
-            .then(response => {
-                setMessage(response.data);
+    const addAnimal = () => {
+        axios.post('animal/add', {
+            name: 'lion 222',
+            age: 2,
+        })
+            .then(res => {
+                console.log(res)
+                console.log(res.data)
+            })
+            .catch(error => console.error(error))
+    }
+
+    const showAllAnimals = () => {
+        axios.get('/animal/get') // Ensure this matches your Express route
+            .then(res => {
+                console.log('All Animals:', res.data); // Log the data
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching animals:', error); // Log any errors
             });
-
-        fetch('http://localhost:3000/animals', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: 'Lion',
-                species: 'Panthera leo',
-                age: 3
-            }),
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-
-    }, []);
-
+    };
 
 
     return (
         <div>
             <h1>Zoo app</h1>
+            <button onClick={addAnimal}>add animal</button>
+            <button onClick={showAllAnimals}>show all animals</button>
             <p>{message}</p>
         </div>
     );
