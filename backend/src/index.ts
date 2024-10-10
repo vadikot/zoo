@@ -10,7 +10,7 @@ const port = 5050;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/animal', animalRouter); // Use the animal router
+app.use('/api/animals', animalRouter); // Use the animal router
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost/zoo')
