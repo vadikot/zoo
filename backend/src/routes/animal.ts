@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 // add new animal
 router.post('/', async (req, res) => {
     const {type, data} = req.body;
+
     try {
         await zooService.addAnimal(type, data);
         res.status(201).send('Animal added');

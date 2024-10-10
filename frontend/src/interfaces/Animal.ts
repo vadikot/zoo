@@ -1,4 +1,4 @@
-export interface Animal {
+export interface IAnimal {
     _id: string;
     name: string;
     age: number;
@@ -6,10 +6,15 @@ export interface Animal {
     type: string;
 }
 
-export interface Cat extends Animal {
+export interface Cat extends IAnimal {
     livesLeft: number;
 }
 
-export interface Dog extends Animal {
+export interface Dog extends IAnimal {
     breed: string;
+}
+
+export enum AnimalType {
+    Cat = 'Cat',
+    Dog = 'Dog',
 }

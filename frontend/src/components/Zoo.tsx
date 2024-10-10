@@ -1,10 +1,9 @@
-// src/components/Zoo.tsx
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { Animal } from '../interfaces/Animal';
+import {IAnimal} from '../interfaces/Animal';
 
 const Zoo: React.FC = () => {
-    const [animals, setAnimals] = useState<Animal[]>([]);
+    const [animals, setAnimals] = useState<IAnimal[]>([]);
 
     useEffect(() => {
         axios.get('/api/animals')
@@ -16,7 +15,7 @@ const Zoo: React.FC = () => {
         axios.post(`/api/animals/${id}/feed`)
             .then(() => {
                 setAnimals(animals.map(animal =>
-                    animal._id === id ? { ...animal, hungerLevel: Math.max(0, animal.hungerLevel - 30) } : animal
+                    animal._id === id ? {...animal, hungerLevel: Math.max(0, animal.hungerLevel - 30)} : animal
                 ));
             })
             .catch(err => console.error(err));

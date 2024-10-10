@@ -14,6 +14,8 @@ class ZooService {
         } else if (type === 'Dog') {
             const dog = new Dog(data);
 
+            dog.breed = 'test breed'; // todo temporary stopper: figure it on frontend
+
             await dog.save();
         } else {
             throw new Error('Invalid animal type');
