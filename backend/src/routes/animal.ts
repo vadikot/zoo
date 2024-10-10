@@ -12,33 +12,33 @@ router.get('/', async (req, res) => {
 
 // add new animal
 router.post('/', async (req, res) => {
-    const { type, data } = req.body;
+    const {type, data} = req.body;
     try {
         await zooService.addAnimal(type, data);
         res.status(201).send('Animal added');
     } catch (error) {
-        res.status(400).send({ error: error });
+        res.status(400).send({error: error});
     }
 });
 
 // feed animal
-// router.post('/:id/feed', async (req, res) => {
-//     try {
-//         await zooService.feedAnimal(req.params.id);
-//         res.send('Animal fed');
-//     } catch (error) {
-//         res.status(404).send({ error: error.message });
-//     }
-// });
+router.post('/:id/feed', async (req, res) => {
+    try {
+        await zooService.feedAnimal(req.params.id);
+        res.send('Animal fed');
+    } catch (error) {
+        res.status(404).send({error: (error as Error).message});
+    }
+});
 
 // animal makes sound
-// router.get('/:id/sound', async (req, res) => {
-//     try {
-//         const sound = await zooService.makeSound(req.params.id);
-//         res.send(sound);
-//     } catch (error) {
-//         res.status(404).send({ error: error.message });
-//     }
-// });
+router.get('/:id/sound', async (req, res) => {
+    try {
+        const sound = await zooService.makeSound(req.params.id);
+        res.send(sound);
+    } catch (error) {
+        res.status(404).send({error: (error as Error).message});
+    }
+});
 
 export default router;

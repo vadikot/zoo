@@ -1,53 +1,70 @@
 import Cat from "../models/Cat";
 import {Dog} from "../models/Dog";
-import Animal from "../models/Animal";
-
+import Animal, {IAnimal} from "../models/Animal";
+import {HydratedDocument} from "mongoose";
 
 
 class ZooService {
-    // add new animal
+
     async addAnimal(type: string, data: any): Promise<void> {
         if (type === 'Cat') {
             const cat = new Cat(data);
+
             await cat.save();
         } else if (type === 'Dog') {
             const dog = new Dog(data);
+
             await dog.save();
         } else {
             throw new Error('Invalid animal type');
         }
     }
 
-    // get all animals
     async getAllAnimals() {
-        return await Animal.find();
+        try {
+            return Animal.find();
+        } catch (e) {
+            throw new Error('Could not fetch animals: ' + (e as Error).message);
+        }
     }
 
-    // get animal by id
     async getAnimalById(id: string) {
-        return await Animal.findById(id);
+        try {
+            return Animal.findById(id);
+        } catch (e) {
+            throw new Error('Could not find animal by ID: ' + (e as Error).message);
+        }
     }
 
-    // feed animal
     async feedAnimal(id: string) {
-        const animal = await Animal.findById(id);
+        const animal: HydratedDocument<IAnimal> | null = await Animal.findById(id);
+
         if (!animal) {
             throw new Error('Animal not found');
         }
-        await animal.feed();
+
+        try {
+            await animal.feed();
+        } catch (error) {
+            throw new Error('feeding failed' + (error as Error).message);
+        }
     }
 
-    // delete animal
-    // async removeAnimal(id: string) {
-    //     await Animal.findByIdAndRemove(id);
-    // }
+    async removeAnimal(id: string) {
+        try {
+            await Animal.findByIdAndDelete(id);
+        } catch (e) {
+            throw new Error('Animal by ID not removed: ' + (e as Error).message);
+        }
+    }
 
-    // animal makes sound
     async makeSound(id: string): Promise<string> {
-        const animal = await Animal.findById(id);
+        const animal: HydratedDocument<IAnimal> | null = await Animal.findById(id);
+
         if (!animal) {
             throw new Error('Animal not found');
         }
+
         return animal.makeSound();
     }
 }
