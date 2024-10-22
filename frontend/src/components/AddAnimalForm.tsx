@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {AnimalType} from "../interfaces/Animal";
 import axios from "axios";
 
-const AddAnimalForm = () => {
+interface AddAnimalFormProps {
+    animalCallback?: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const AddAnimalForm = ({animalCallback}: AddAnimalFormProps) => {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [hungerLevel, setHungerLevel] = useState('');
@@ -24,6 +28,13 @@ const AddAnimalForm = () => {
                 type: animalType,
                 data: newAnimal,
             });
+
+            if (response.status === 201 || response.status === 200) {
+                if (animalCallback) {
+                    animalCallback(prev => prev + 1);
+                }
+            }
+
             // console.log('Animal added:' + response.data);
         } catch (e) {
             throw new Error("animal not added: " + (e as Error).message);

@@ -2,14 +2,18 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {IAnimal} from '../interfaces/Animal';
 
-const Zoo: React.FC = () => {
+interface ZooProps {
+    animalCounter: number;
+}
+
+const Zoo: React.FC<ZooProps> = ({animalCounter}) => {
     const [animals, setAnimals] = useState<IAnimal[]>([]);
 
     useEffect(() => {
         axios.get('/api/animals')
             .then(res => setAnimals(res.data))
             .catch(err => console.error(err));
-    }, []);
+    }, [animalCounter]);
 
     const feedAnimal = (id: string) => {
         axios.post(`/api/animals/${id}/feed`)
