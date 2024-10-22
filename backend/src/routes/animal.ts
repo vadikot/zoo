@@ -42,4 +42,17 @@ router.get('/:id/sound', async (req, res) => {
     }
 });
 
+router.delete('/:id/remove', async (req, res) => {
+    try {
+        await zooService.removeAnimal(req.params.id);
+        res.status(201).send('animal removed');
+    } catch (error) {
+        if ((error as Error).message === 'Animal not found') {
+            res.status(404).send({error: (error as Error).message})
+        } else {
+            res.status(500).send({error: 'Internal Server Error'})
+        }
+    }
+});
+
 export default router;

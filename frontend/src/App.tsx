@@ -9,7 +9,7 @@ const App = () => {
         <div>
             <h1>Zoo app</h1>
             <AddAnimalForm animalCallback={setAnimalCounter}/>
-            <Zoo animalCounter={animalCounter}/>
+            <Zoo animalCounter={animalCounter} animalCallback={setAnimalCounter}/>
         </div>
     );
 };

@@ -54,7 +54,11 @@ class ZooService {
 
     async removeAnimal(id: string) {
         try {
-            await Animal.findByIdAndDelete(id);
+            const removedAnimal = await Animal.findByIdAndDelete(id);
+
+            if (!removedAnimal) {
+                throw new Error('Animal not found')
+            }
         } catch (e) {
             throw new Error('Animal by ID not removed: ' + (e as Error).message);
         }

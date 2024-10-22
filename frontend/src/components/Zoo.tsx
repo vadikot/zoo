@@ -4,9 +4,10 @@ import {IAnimal} from '../interfaces/Animal';
 
 interface ZooProps {
     animalCounter: number;
+    animalCallback: React.Dispatch<React.SetStateAction<number>>
 }
 
-const Zoo: React.FC<ZooProps> = ({animalCounter}) => {
+const Zoo: React.FC<ZooProps> = ({animalCounter, animalCallback}) => {
     const [animals, setAnimals] = useState<IAnimal[]>([]);
 
     useEffect(() => {
@@ -31,6 +32,20 @@ const Zoo: React.FC<ZooProps> = ({animalCounter}) => {
             .catch(err => console.error(err));
     };
 
+    const removeAnimal = async (id: string) => {
+        // check for correct ID
+        if (!/^[a-fA-F0-9]{24}$/.test(id)) {
+            console.error('Invalid animal ID');
+            return;
+        }
+
+        axios.delete(`/api/animals/${id}/remove`)
+            .then(res => {
+                animalCallback(prevState => prevState - 1);
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <div>
             <h1>Зоопарк</h1>
@@ -40,6 +55,7 @@ const Zoo: React.FC<ZooProps> = ({animalCounter}) => {
                         {animal.name} (Возраст: {animal.age}, Уровень голода: {animal.hungerLevel})
                         <button onClick={() => feedAnimal(animal._id)}>Покормить</button>
                         <button onClick={() => makeSound(animal._id)}>Издать звук</button>
+                        <button onClick={() => removeAnimal(animal._id)}>remove</button>
                     </li>
                 ))}
             </ul>
